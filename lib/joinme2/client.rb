@@ -2,12 +2,23 @@ require 'httparty'
 
 module Joinme2
   class Client
-    attr_accessor :base_url
+    attr_accessor :base_uri,
+                  :default_scopes,
+                  :redirect_uri,
+                  :client_id,
+                  :auth_uri
 
     include HTTParty
 
-    def initialize(oauth_token, options = {})
-      self.class.base_uri "https://api.join.me/v1"
+    def initialize(options = {})
+      oauth_token = options[:oauth_token]
+
+      options = Joinme2.options.merge(options)
+      [:base_uri, :default_scopes, :redirect_uri, :client_id, :auth_uri].each do |accessor|
+        send("#{accessor}=", options[accessor])
+      end
+
+      self.class.base_uri base_uri
       @options = {
         headers: {
           "Authorization" => "Bearer #{oauth_token}",
@@ -15,6 +26,16 @@ module Joinme2
           "User-Agent" => 'X-JOINME-CLIENT'
         }
       }
+    end
+
+    def authorize_url(options = {})
+      params = {}
+      params[:scope] = options[:scope] || default_scopes
+      params[:redirect_uri] = options[:redirect_uri] || redirect_uri
+      params[:client_id] = options[:client_id] || client_id
+      URI.parse(auth_uri).tap do |uri|
+        uri.query = URI.encode_www_form params
+      end.to_s
     end
 
     def start_new_meeting(body = { "startWithPersonalUrl": false })
@@ -34,7 +55,7 @@ module Joinme2
     def get_scheduled_meetings(end_date = nil)
       payload = @options.dup
       payload[:headers][:endDate] = end_date if end_date
-      self.class.get('/meetings', payload)
+      self.class.get('/meetings', @options)
     end
 
     def schedule_new_meeting(start_date, end_date, name, participants = [])
