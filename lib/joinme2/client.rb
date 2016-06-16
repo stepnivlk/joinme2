@@ -58,7 +58,7 @@ module Joinme2
       self.class.get('/meetings', @options)
     end
 
-    def schedule_new_meeting(start_date, end_date, name, participants = [])
+    def schedule_new_meeting(name, participants = [], start_date = nil, end_date = nil)
       body = {}
       body[:meetingStart] = DateTime.parse(start_date).iso8601
       body[:meetingEnd] = DateTime.parse(end_date).iso8601
