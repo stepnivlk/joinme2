@@ -60,8 +60,8 @@ module Joinme2
 
     def schedule_new_meeting(name, participants = [], start_date = nil, end_date = nil)
       body = {}
-      body[:meetingStart] = DateTime.parse(start_date).iso8601
-      body[:meetingEnd] = DateTime.parse(end_date).iso8601
+      body[:meetingStart] = DateTime.parse(start_date).iso8601 if start_date
+      body[:meetingEnd] = DateTime.parse(end_date).iso8601 if end_date
       body[:meetingName] = name
       body[:participants] = participants
       payload = @options.dup
@@ -69,7 +69,7 @@ module Joinme2
       self.class.post('/meetings', payload)
     end
 
-    def update_meeting(id, start_date = nil, end_date = nil, name = nil, participants = nil)
+    def update_meeting(id, name = nil, participant = nil, start_date = nil, end_date = nil)
       body = {}
       body[:meetingStart] = DateTime.parse(start_date).iso8601 if start_date
       body[:meetingEnd] = DateTime.parse(end_date).iso8601 if end_date
