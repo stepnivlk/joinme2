@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['tomas@stepnivlk.net']
 
   spec.summary       = %q{Ruby wrapper for Joinme API.}
-  spec.description   = %q{With this gem you can easily manage all your meetings.}
+  spec.description   = %q{Simple Ruby wrapper for the JoinMe API. With this gem you can easily manage all your meetings.}
   spec.homepage      = 'https://github.com/stepnivlk/joinme2'
   spec.license       = 'MIT'
 
@@ -18,11 +18,12 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
+  spec.required_ruby_version = '~> 2.0'
 
-  spec.add_runtime_dependency 'httparty'
-  spec.add_runtime_dependency 'hashie'
+  spec.add_runtime_dependency 'httparty', '~> 0.13.0'
+  spec.add_runtime_dependency 'hashie', '~> 3.4.0'
   spec.add_development_dependency 'bundler', '~> 1.11'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'minitest', '~> 5.0'
-  spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'pry', '~> 0.3.0'
 end
