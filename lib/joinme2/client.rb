@@ -1,4 +1,5 @@
 require 'httparty'
+require_relative './mashed_parser'
 
 module Joinme2
   class Client
@@ -9,6 +10,8 @@ module Joinme2
                   :auth_uri
 
     include HTTParty
+    parser Class.new HTTParty::Parser
+    parser.send :include, MashedParser
 
     def initialize(options = {})
       oauth_token = options[:oauth_token]
@@ -28,6 +31,19 @@ module Joinme2
       }
     end
 
+    # Public: Generates Joinme authorization url based on client_id, auth_uri
+    # redirect_uri and scopes. Redirect URI has to match configured Joinme
+    # Application callback URL.
+    #
+    # Examples:
+    #
+    #   authorize_url(redirect_uri: 'http://example.com/',
+    #                 scope: "user_info scheduler start_meeting",
+    #                 client_id: "XXXXX")
+    #   # =>
+    #   "https://secure.join.me/api/public/v1/auth/oauth2..."
+    #
+    # Returns authorization url as a string.
     def authorize_url(options = {})
       params = {}
       params[:scope] = options[:scope] || default_scopes
@@ -38,6 +54,9 @@ module Joinme2
       end.to_s
     end
 
+    # Public: Connects to Joinme API and starts new meeting.
+    #
+    # Returns Hashie::Mash representation of API response.
     def start_new_meeting(body = { "startWithPersonalUrl": false })
       payload = @options.dup
       payload[:body] = body.to_json
@@ -58,10 +77,11 @@ module Joinme2
       self.class.get('/meetings', @options)
     end
 
-    def schedule_new_meeting(name, participants = [], start_date = nil, end_date = nil)
+    def schedule_new_meeting(name, participants = [], start_date, end_date)
       body = {}
-      body[:meetingStart] = DateTime.parse(start_date).iso8601 if start_date
-      body[:meetingEnd] = DateTime.parse(end_date).iso8601 if end_date
+      body[:startWithPersonalUrl] = false
+      body[:meetingStart] = iso_date!(start_date)
+      body[:meetingEnd] = iso_date!(end_date)
       body[:meetingName] = name
       body[:participants] = participants
       payload = @options.dup
@@ -71,10 +91,10 @@ module Joinme2
 
     def update_meeting(id, name = nil, participant = nil, start_date = nil, end_date = nil)
       body = {}
-      body[:meetingStart] = DateTime.parse(start_date).iso8601 if start_date
-      body[:meetingEnd] = DateTime.parse(end_date).iso8601 if end_date
-      body[:meetingName] = name if name
-      body[:participants] = participants if participants
+      body[:meetingStart] = iso_date(start_date)
+      body[:meetingEnd] = iso_date(end_datee)
+      body[:meetingName] = name
+      body[:participants] = participants
       payload = @options.dup
       payload[:body] = body.to_json
       self.class.patch("/meetings/#{id}", payload)
@@ -86,6 +106,27 @@ module Joinme2
 
     def get_user
       self.class.get('/user', @options)
+    end
+
+    private
+
+    def iso_date!(date)
+      parse_date(date, true)
+    end
+
+    def iso_date(date)
+      parse_date(date)
+    end
+
+    def parse_date(date, throw_exception = false)
+      case
+      when date.is_a?(String)
+        DateTime.parse(date).iso8601
+      when date.is_a?(DateTime)
+        date.iso8601
+      else
+        throw_exception ? (raise BadInputDate) : nil
+      end
     end
   end
 end

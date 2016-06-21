@@ -1,17 +1,17 @@
 module Joinme2
   module Configuration
-    AUTH_URI = 'https://secure.join.me/api/public/v1/auth/oauth2'
-    BASE_URI = 'https://api.join.me/v1/'
+    AUTH_URI = 'https://secure.join.me/api/public/v1/auth/oauth2'.freeze
+    BASE_URI = 'https://api.join.me/v1/'.freeze
     API_KEY = nil
     REDIRECT_URI = nil
     CLIENT_ID = nil
-    DEFAULT_SCOPES = 'user_info scheduler start_meeting'
+    DEFAULT_SCOPES = 'user_info scheduler start_meeting'.freeze
 
     VALID_ACCESSORS = [:base_uri,
                        :default_scopes,
                        :redirect_uri,
                        :client_id,
-                       :auth_uri]
+                       :auth_uri].freeze
 
     attr_accessor *VALID_ACCESSORS
 

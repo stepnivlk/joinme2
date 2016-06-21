@@ -1,8 +1,5 @@
 # Joinme2
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/joinme2`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Simple Ruby wrapper for the JoinMe API
 
 ## Installation
 
@@ -22,7 +19,34 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+Joinme2.configure do |config|
+  config.client_id = 'CLIENT_ID'
+  config.redirect_uri = 'REDIRECT_URI'
+end
+
+joinme = Joinme2.client(oauth_token: 'OAUTH_TOKEN')
+# => #<Joinme2::Client:0x00000003d96ab8...
+
+joinme.authorize_url
+# => "https://secure.join.me/api/public/v1/auth/oauth2?..."
+
+joinme.start_new_meeting
+
+joinme.schedule_new_meeting('Test Meeting',
+                            ['ex1@example.com', 'ex2@example.com'],
+                            '2016-06-21T16:00:00+02:00',
+                            '2016-06-21T17:00:00+02:00')
+
+joinme.update_meeting(23, 'Updated Name',
+                          ['up1@example.com', 'up2@example.com'],
+                          '2016-07-21T16:00:00+02:00',
+                          '2016-07-21T17:00:00+02:00')
+
+joinme.delete_meeting(23)
+
+joinme.get_user
+```
 
 ## Development
 
