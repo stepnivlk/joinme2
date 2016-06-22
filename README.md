@@ -33,11 +33,11 @@ joinme.authorize_url
 
 joinme.start_new_meeting
 # => {"presenterLink"=>"https://secure.join.me/API/Public/StartMeeting.aspx?token=TOKEN",
-      "viewerLink"=>"https://secure.join.me/LINK_ID",
-      "audioConference"=>
-        {"conferenceId"=>"CONFERENCE_ID",
-         "conferenceCallNumbersUrl"=>"https://secure.join.me/api/public/intphone.aspx?conferenceId=CONFERENCE_ID",
-         "organizerCode"=>"CODE"}}
+#     "viewerLink"=>"https://secure.join.me/LINK_ID",
+#     "audioConference"=>
+#       {"conferenceId"=>"CONFERENCE_ID",
+#        "conferenceCallNumbersUrl"=>"https://secure.join.me/api/public/intphone.aspx?conferenceId=CONFERENCE_ID",
+#        "organizerCode"=>"CODE"}}
 
 joinme.schedule_new_meeting('Test Meeting',
                             ['ex1@example.com', 'ex2@example.com'],
@@ -63,7 +63,16 @@ joinme.get_scheduled_meetings
 #        "meetingEnd"=>"2016-07-21T15:00:00Z",
 #        "startWithPersonalUrl"=>false}]}
 
-joinme.delete_meeting(23) 
+joinme.get_scheduled_meeting(23)
+# => {"meetingId"=>23,
+#     "meetingName"=>"Updated Name",
+#     "meetingStart"=>"2016-07-21T14:00:00Z",
+#     "meetingEnd"=>"2016-07-21T15:00:00Z",
+#     "startWithPersonalUrl"=>false,
+#     "participants"=>["up1@example.com", "up2@example.com"],
+#     "conferenceId"=> "CONFERENCE_ID"}
+
+joinme.delete_meeting(23)
 
 joinme.get_user
 ```
