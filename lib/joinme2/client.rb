@@ -88,11 +88,10 @@ module Joinme2
 
     def update_meeting(id, name = nil, participants = nil, start_date = nil, end_date = nil)
       body = {}
-      body[:meetingId] = id
       body[:meetingStart] = iso_date(start_date)
       body[:meetingEnd] = iso_date(end_date)
       body[:meetingName] = name
-      body[:participants] = participants
+      body[:participants] = participants if participants
       payload = @options.dup
       payload[:body] = body.to_json
       self.class.patch("/meetings/#{id}", payload)
