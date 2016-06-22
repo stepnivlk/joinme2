@@ -55,7 +55,15 @@ joinme.update_meeting(23, 'Updated Name',
                           '2016-07-21T16:00:00+02:00',
                           '2016-07-21T17:00:00+02:00')
 
-joinme.delete_meeting(23)
+joinme.get_scheduled_meetings
+# => {"meetings"=>
+#      [{"meetingId"=>23,
+#        "meetingName"=>"Updated Name",
+#        "meetingStart"=>"2016-07-21T14:00:00Z",
+#        "meetingEnd"=>"2016-07-21T15:00:00Z",
+#        "startWithPersonalUrl"=>false}]}
+
+joinme.delete_meeting(23) 
 
 joinme.get_user
 ```
