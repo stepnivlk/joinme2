@@ -3,11 +3,7 @@ require_relative './mashed_parser'
 
 module Joinme2
   class Client
-    attr_accessor :base_uri,
-                  :default_scopes,
-                  :redirect_uri,
-                  :client_id,
-                  :auth_uri
+    attr_accessor *Configuration::VALID_ACCESSORS
 
     include HTTParty
     parser Class.new HTTParty::Parser
@@ -17,7 +13,7 @@ module Joinme2
       oauth_token = options[:oauth_token]
 
       options = Joinme2.options.merge(options)
-      [:base_uri, :default_scopes, :redirect_uri, :client_id, :auth_uri].each do |accessor|
+      Configuration::VALID_ACCESSORS.each do |accessor|
         send("#{accessor}=", options[accessor])
       end
 
@@ -49,6 +45,7 @@ module Joinme2
       params[:scope] = options[:scope] || default_scopes
       params[:redirect_uri] = options[:redirect_uri] || redirect_uri
       params[:client_id] = options[:client_id] || client_id
+      params[:response_type] = options[:response_type] || response_type
       URI.parse(auth_uri).tap do |uri|
         uri.query = URI.encode_www_form params
       end.to_s

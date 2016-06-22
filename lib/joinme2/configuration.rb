@@ -6,12 +6,14 @@ module Joinme2
     REDIRECT_URI = nil
     CLIENT_ID = nil
     DEFAULT_SCOPES = 'user_info scheduler start_meeting'.freeze
+    RESPONSE_TYPE = 'token'.freeze
 
     VALID_ACCESSORS = [:base_uri,
                        :default_scopes,
                        :redirect_uri,
                        :client_id,
-                       :auth_uri].freeze
+                       :auth_uri,
+                       :response_type].freeze
 
     attr_accessor *VALID_ACCESSORS
 
@@ -35,6 +37,7 @@ module Joinme2
       self.redirect_uri = REDIRECT_URI
       self.client_id = CLIENT_ID
       self.auth_uri = AUTH_URI
+      self.response_type = RESPONSE_TYPE
     end
   end
 end
