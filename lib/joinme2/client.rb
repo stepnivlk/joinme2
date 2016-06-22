@@ -86,7 +86,7 @@ module Joinme2
       self.class.post('/meetings', payload)
     end
 
-    def update_meeting(id, name = nil, participant = nil, start_date = nil, end_date = nil)
+    def update_meeting(id, name = nil, participants = nil, start_date = nil, end_date = nil)
       body = {}
       body[:meetingStart] = iso_date(start_date)
       body[:meetingEnd] = iso_date(end_date)

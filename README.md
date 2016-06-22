@@ -32,17 +32,23 @@ joinme.authorize_url
 # => "https://secure.join.me/api/public/v1/auth/oauth2?..."
 
 joinme.start_new_meeting
+# => {"presenterLink"=>"https://secure.join.me/API/Public/StartMeeting.aspx?token=TOKEN",
+      "viewerLink"=>"https://secure.join.me/LINK_ID",
+      "audioConference"=>
+        {"conferenceId"=>"CONFERENCE_ID",
+         "conferenceCallNumbersUrl"=>"https://secure.join.me/api/public/intphone.aspx?conferenceId=CONFERENCE_ID",
+         "organizerCode"=>"CODE"}}
 
 joinme.schedule_new_meeting('Test Meeting',
                             ['ex1@example.com', 'ex2@example.com'],
                             '2016-06-21T16:00:00+02:00',
                             '2016-06-21T17:00:00+02:00')
 # => {"meetingId"=>23,
- "meetingName"=>"Test Meeting",
- "meetingStart"=>"2016-06-21T14:00:00Z",
- "meetingEnd"=>"2016-06-21T15:00:00Z",
- "startWithPersonalUrl"=>false,
- "participants"=>["ex1@example.com", "ex2@example.com"]}
+#     "meetingName"=>"Test Meeting",
+#     "meetingStart"=>"2016-06-21T14:00:00Z",
+#     "meetingEnd"=>"2016-06-21T15:00:00Z",
+#     "startWithPersonalUrl"=>false,
+#     "participants"=>["ex1@example.com", "ex2@example.com"]}
 
 joinme.update_meeting(23, 'Updated Name',
                           ['up1@example.com', 'up2@example.com'],
